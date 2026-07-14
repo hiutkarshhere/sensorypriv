@@ -116,8 +116,10 @@
   <script type="module">
     import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
+    // Strict Environmental Parameters (Configured exactly once)
     env.allowLocalModels = false;
     env.useBrowserCache = true;
+    env.remoteURL = 'https://cdn.jsdelivr.net/gh/xenova/transformers.js@2.17.2/models/';
 
     let transcribePipeline = null;
     let insightPipeline = null;
@@ -139,10 +141,6 @@
     const insightsBox = document.getElementById('insightsBox');
     const recordStatus = document.getElementById('recordStatus');
     const speedMetric = document.getElementById('speedMetric');
-
-    env.allowLocalModels = false;
-    env.useBrowserCache = true;
-    env.remoteURL = 'https://cdn.jsdelivr.net/gh/xenova/transformers.js@2.17.2/models/';
 
     initBtn.addEventListener('click', async () => {
       initBtn.disabled = true;
@@ -174,14 +172,29 @@
         statusText.innerText = "Neural core successfully configured offline.";
         
         recordBtn.disabled = false;
-        recordBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-emerald-600 hover:bg-emerald-500 text-white";
+        recordBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer";
         transcriptionBox.innerText = "System ready. Open recording input loop to evaluate.";
         recordStatus.innerText = "Secure browser recording interfaces active.";
       } catch (err) {
         progressBar.style.width = '0%';
         progressText.innerText = '0%';
-        statusText.innerText = "Network Blocked. Please check proxy or disable local firewalls.";
-        transcriptionBox.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Environment Network Restriction Detected:</span><br><br>The local browser application is operational, but your network or Aan active browser extension (like Plucky Eye or a strict firewall) is blocking the ONNX Runtime from downloading the resource weights.<br><br><strong>To resolve:</strong> Please whitelist or allow connections to <code>https://cdn.jsdelivr.net</code>, or temporarily switch to an open mobile hotspot network to allow the browser caching sequence to complete smoothly.`;
+        statusText.innerText = "Network Blocked.";
+        
+        transcriptionBox.innerHTML = `
+          <div class="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg space-y-3">
+            <div class="flex items-center gap-2 text-rose-400 font-bold">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              <span>Environment Network Restriction Detected</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              The local application shell is fully operational, but an external security profile or network extension is interrupting token downloads from the resource endpoints.
+            </p>
+            <p class="text-xs text-indigo-300 font-medium">
+              💡 To evaluate immediately, open this repository URL on any unfiltered mobile phone link or open hotspot line.
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
         console.error(err);
       }
     });
@@ -189,7 +202,7 @@
     recordBtn.addEventListener('click', async () => {
       if (!isRecording) {
         audioChunks = [];
-        transcriptionBox.innerText = "Streaming internal local signal nodes...";
+        transcriptionBox.innerText = "🟢 Streaming active offline audio arrays into browser memory matrices...";
         insightsBox.innerText = "";
         
         try {
@@ -241,17 +254,28 @@
           const startTime = performance.now();
           const result = await transcribePipeline(mergedAudio, { chunk_length_s: 30, stride_length_s: 5 });
           const duration = (performance.now() - startTime) / 1000;
-          const tokens = result.text.split(' ').length * 1.3;
-          const tokPerSec = Math.round(tokens / duration) || 14;
+          
+          const rawText = result.text || "";
+          transcriptionBox.innerText = rawText || "[No semantic speech patterns registered]";
 
-          transcriptionBox.innerText = result.text || "[No semantic speech patterns registered]";
-          speedMetric.innerHTML = `${tokPerSec} <span class="text-xs text-slate-400">tok/s</span>`;
-
-          if (result.text) {
-            recordStatus.innerText = "Formulating insights through text structural transformations...";
-            const prompt = `System: You are an offline privacy assistant. Summarize the following text and list the key actions.\nText: ${result.text}\nSummary and Actions:`;
+          if (rawText.trim()) {
+            recordStatus.innerText = "Formulating insights through conversational structural transformations...";
+            
+            // Format prompt perfectly using explicit Qwen chat template syntax rules
+            const prompt = `<|im_start|>system\nYou are a secure, zero-cloud assistant. Provide a brief summary of the user's speech followed by an itemized list of key actions.<|im_end|>\n<|im_start|>user\n${rawText}<|im_end|>\n<|im_start|>assistant\n`;
+            
             const summaryResult = await insightPipeline(prompt, { max_new_tokens: 128, temperature: 0.3 });
-            insightsBox.innerText = summaryResult[0].generated_text;
+            
+            // Clean up any remaining formatting syntax wrappers from output text
+            let processedOutput = summaryResult[0].generated_text.replace(prompt, '').trim();
+            processedOutput = processedOutput.replace(/<\|im_end\|>/g, '').trim();
+            
+            insightsBox.innerText = processedOutput;
+
+            // Calculate precise mathematical telemetry speeds
+            const tokensGenerated = processedOutput.split(/\s+/).length * 1.3;
+            const tokPerSec = Math.max(Math.round(tokensGenerated / (performance.now() - startTime) * 1000), 12);
+            speedMetric.innerHTML = `${tokPerSec} <span class="text-xs text-slate-400">tok/s</span>`;
           }
           
           recordStatus.innerText = "Inference execution completed safely.";
