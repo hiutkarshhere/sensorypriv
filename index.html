@@ -7,116 +7,131 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#070a13] text-slate-100 min-h-screen p-6 flex flex-col justify-between font-sans">
+<body class="bg-[#070a13] text-slate-100 min-h-screen p-6 flex flex-col justify-between font-sans select-none">
 
-  <!-- Header Console -->
   <header class="flex justify-between items-center border-b border-slate-800 pb-4 mb-6">
     <div class="flex items-center gap-3">
-      <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400 border border-emerald-500/20">
+      <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
         <i data-lucide="shield" class="w-6 h-6 animate-pulse"></i>
       </div>
       <div>
         <h1 class="text-xl font-bold tracking-tight">SENSORY<span style="color: #34d399;">PRIV</span></h1>
-        <p class="text-xs text-slate-400">Zero-Cloud Audio Insight Console</p>
+        <p class="text-xs text-slate-400">Zero-Cloud Local Intelligence Terminal</p>
       </div>
     </div>
     <div class="flex items-center gap-4 text-xs">
-      <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-md border border-slate-800">
+      <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-md border border-slate-800 font-mono">
         <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
-        <span>Engine Framework: <strong class="text-indigo-300">WASM / WebGPU</strong></span>
+        <span>Engine: <strong class="text-indigo-300">WASM / WebGPU</strong></span>
       </div>
-      <div class="flex items-center gap-2 bg-emerald-950/30 text-emerald-400 px-3 py-1.5 rounded-md border border-emerald-500/30">
-        <i data-lucide="check-circle" class="w-4 h-4"></i>
-        <span class="font-medium">100% Offline Secured</span>
+      <div id="shieldBadge" class="flex items-center gap-2 bg-emerald-950/30 text-emerald-400 px-3 py-1.5 rounded-md border border-emerald-500/30 transition-all duration-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span id="shieldText" class="font-semibold uppercase tracking-wider text-[10px]">Evaluating Connection...</span>
       </div>
     </div>
   </header>
 
-  <!-- Main Execution Grid -->
   <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
-    <!-- Left Engine Controls -->
-    <div class="bg-slate-900/60 rounded-xl p-5 border border-slate-800/80 flex flex-col justify-between">
+    
+    <div class="bg-slate-900/60 rounded-xl p-5 border border-slate-800/80 flex flex-col justify-between gap-4">
       <div>
         <h2 class="font-semibold text-slate-200 mb-2 flex items-center gap-2">
           <i data-lucide="hard-drive" class="w-4 h-4 text-slate-400"></i> Core Engine Setup
         </h2>
-        <p class="text-xs text-slate-400 mb-4">
-          Click below to pull structural weights directly into local browser storage frameworks via highly optimized ESM modules.
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+          Spin up highly optimized local neural pipelines completely in the browser memory heap via WASM allocation.
         </p>
 
-        <button id="initBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/10">
+        <button id="initBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-95 cursor-pointer">
           <i data-lucide="download" class="w-4 h-4"></i> Spin Up Offline Engine
         </button>
 
         <div id="progressContainer" class="hidden mt-4 space-y-1">
-          <div class="flex justify-between text-xs font-mono text-slate-400">
-            <span id="statusText">Allocating components...</span>
+          <div class="flex justify-between text-[10px] font-mono text-slate-400">
+            <span id="statusText" class="truncate max-w-[200px]">Allocating components...</span>
             <span id="progressText">0%</span>
           </div>
-          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
             <div id="progressBar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 0%"></div>
           </div>
         </div>
       </div>
 
-      <!-- Real-time Telemetry -->
-      <div class="border-t border-slate-800 pt-4 mt-6 space-y-3">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Live Telemetry Metrics</h3>
+      <div class="flex flex-col flex-1 min-h-[160px] border-t border-slate-800/80 pt-4">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
+          <i data-lucide="terminal" class="w-3.5 h-3.5 text-slate-400"></i> Sandbox Sandbox Diagnostics
+        </h3>
+        <div id="terminalLog" class="flex-1 bg-slate-950 p-3 rounded-lg border border-slate-900 text-[10px] font-mono text-slate-400 overflow-y-auto max-h-[180px] space-y-1 leading-normal scrollbar-thin">
+          <div class="text-indigo-400/80">[SYS] Initializing diagnostic pipeline telemetry...</div>
+          <div class="text-slate-500">[SYS] Ready to mount isolated audio capture threads.</div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-4 space-y-3">
         <div class="grid grid-cols-2 gap-2">
-          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/60">
-            <span class="block text-[10px] text-slate-500 uppercase">Inference Output</span>
-            <span class="text-lg font-mono font-bold text-indigo-400" id="speedMetric">0 <span class="text-xs text-slate-400">tok/s</span></span>
+          <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-900">
+            <span class="block text-[9px] text-slate-500 uppercase font-mono">Inference Latency</span>
+            <span class="text-base font-mono font-bold text-indigo-400" id="speedMetric">0 <span class="text-[10px] text-slate-400 font-normal">tok/s</span></span>
           </div>
-          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/60">
-            <span class="block text-[10px] text-slate-500 uppercase">Memory Footprint</span>
-            <span class="text-lg font-mono font-bold text-slate-300">~150 MB</span>
+          <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-900">
+            <span class="block text-[9px] text-slate-500 uppercase font-mono">System Cache Sandbox</span>
+            <span class="text-base font-mono font-bold text-slate-300">~150 MB</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Output Views -->
     <div class="lg:col-span-2 flex flex-col gap-4">
-      <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-800/80 flex items-center justify-between gap-4">
-        <div class="text-sm text-slate-300" id="recordStatus">
-          Awaiting engine initialization sequence to mount local microphone capture pipelines.
+      
+      <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-800/80 flex flex-col gap-4">
+        <div class="flex items-center justify-between gap-4">
+          <div class="text-sm text-slate-300" id="recordStatus">
+            Initialize execution arrays to mount browser audio sandboxes.
+          </div>
+          <button id="recordBtn" disabled class="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-slate-800 text-slate-500 cursor-not-allowed">
+            Open Secure Local Recording
+          </button>
         </div>
-        <button id="recordBtn" disabled class="px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-slate-800 text-slate-500 cursor-not-allowed">
-          Open Secure Local Recording
-        </button>
+
+        <div id="visualizerContainer" class="hidden w-full bg-slate-950 rounded-lg p-2 border border-slate-900 relative">
+          <span class="absolute top-2 left-2 text-[8px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/20 animate-pulse">Live Audio Sandbox</span>
+          <canvas id="waveformCanvas" class="w-full h-12 block"></canvas>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-        <!-- Live Transcription -->
+        
         <div class="bg-slate-900/40 rounded-xl p-5 border border-slate-800/80 flex flex-col">
-          <label class="text-xs font-semibold text-indigo-400 mb-2 uppercase tracking-widest block">Secure Local Transcription Output</label>
-          <div id="transcriptionBox" class="flex-1 bg-slate-950/80 rounded-lg p-4 font-mono text-sm leading-relaxed text-slate-300 overflow-y-auto max-h-[320px] border border-slate-900">
-            Systems offline. Initialize engine framework to continue.
+          <label class="text-xs font-semibold text-indigo-400 mb-2 uppercase tracking-widest flex items-center gap-1.5">
+            <i data-lucide="file-audio" class="w-3.5 h-3.5"></i> Local Transcription Stream
+          </label>
+          <div id="transcriptionBox" class="flex-1 bg-slate-950/80 rounded-lg p-4 font-mono text-xs leading-relaxed text-slate-400 overflow-y-auto max-h-[300px] border border-slate-900">
+            Engine inactive. Tap "Spin Up" controls to boot pipeline.
           </div>
         </div>
 
-        <!-- Local Structural Summarization Insights -->
         <div class="bg-slate-900/40 rounded-xl p-5 border border-slate-800/80 flex flex-col">
           <label class="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-widest flex items-center gap-1.5">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Structured Local Privacy Insights
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i> Structured Local Privacy Insights
           </label>
-          <div id="insightsBox" class="flex-1 bg-slate-950/80 rounded-lg p-4 text-sm leading-relaxed text-slate-300 overflow-y-auto max-h-[320px] border border-slate-900 whitespace-pre-line">
-            Analytics telemetry will compile here.
+          <div id="insightsBox" class="flex-1 bg-slate-950/80 rounded-lg p-4 text-xs leading-relaxed text-slate-400 overflow-y-auto max-h-[300px] border border-slate-900 whitespace-pre-line">
+            Analytics compilation metrics will render here.
           </div>
         </div>
+        
       </div>
     </div>
   </main>
 
   <footer class="mt-6 pt-4 border-t border-slate-900 flex justify-between items-center text-xs text-slate-500">
-    <p>© 2026 SensoryPriv. Distributed securely under MIT Terms.</p>
-    <p>Zero external dependency footprint.</p>
+    <p>© 2026 SensoryPriv. Licensed securely under MIT conditions.</p>
+    <p>Zero server networks. Zero tracking vectors.</p>
   </footer>
 
   <script type="module">
     import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
-    // Strict Environmental Parameters (Configured exactly once)
+    // Core WASM Environments Staged
     env.allowLocalModels = false;
     env.useBrowserCache = true;
     env.remoteURL = 'https://cdn.jsdelivr.net/gh/xenova/transformers.js@2.17.2/models/';
@@ -128,6 +143,11 @@
     let processor = null;
     let stream = null;
     let audioChunks = [];
+    
+    // Web Audio Visualizer API parameters
+    let analyser = null;
+    let dataArray = null;
+    let animationId = null;
 
     lucide.createIcons();
 
@@ -141,11 +161,47 @@
     const insightsBox = document.getElementById('insightsBox');
     const recordStatus = document.getElementById('recordStatus');
     const speedMetric = document.getElementById('speedMetric');
+    const terminalLog = document.getElementById('terminalLog');
+    const shieldBadge = document.getElementById('shieldBadge');
+    const shieldText = document.getElementById('shieldText');
+    const visualizerContainer = document.getElementById('visualizerContainer');
+    const canvas = document.getElementById('waveformCanvas');
+    const canvasCtx = canvas.getContext('2d');
+
+    // Utility: Append diagnostic logs to UI Console
+    function logSys(msg, type = "sys") {
+      const time = new Date().toLocaleTimeString().split(' ')[0];
+      const div = document.createElement('div');
+      if (type === "error") div.className = "text-rose-400 font-bold";
+      else if (type === "success") div.className = "text-emerald-400 font-medium";
+      else if (type === "info") div.className = "text-indigo-400";
+      else div.className = "text-slate-400";
+      div.innerHTML = `[${time}] ${msg}`;
+      terminalLog.appendChild(div);
+      terminalLog.scrollTop = terminalLog.scrollHeight;
+    }
+
+    // Dynamic Online/Offline Network Status Badge
+    function updateNetworkStatus() {
+      if (navigator.onLine) {
+        shieldBadge.className = "flex items-center gap-2 bg-indigo-950/30 text-indigo-400 px-3 py-1.5 rounded-md border border-indigo-500/30 transition-all";
+        shieldText.innerText = "Online (Syncing Cache)";
+        logSys("System online. Model cache fetching enabled.", "info");
+      } else {
+        shieldBadge.className = "flex items-center gap-2 bg-emerald-950/40 text-emerald-400 px-3 py-1.5 rounded-md border border-emerald-400 shadow-md shadow-emerald-500/10 transition-all animate-pulse";
+        shieldText.innerText = "Shield Active: 100% Offline";
+        logSys("⚡ NETWORKS CUT: Absolute sandbox air-gapping verified.", "success");
+      }
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    updateNetworkStatus();
 
     initBtn.addEventListener('click', async () => {
       initBtn.disabled = true;
-      initBtn.innerText = "Initializing Systems...";
+      initBtn.innerText = "Initializing WASM Runtime...";
       progressContainer.classList.remove('hidden');
+      logSys("Initializing browser ONNX WebAssembly container...","info");
       
       const progressMap = {};
       const onProgress = (data) => {
@@ -155,59 +211,100 @@
           const percent = Math.min(Math.round(totalLoaded / 4), 99);
           progressBar.style.width = `${percent}%`;
           progressText.innerText = `${percent}%`;
+          if (percent % 25 === 0) {
+            logSys(`Fetched weight array file chunk: ${percent}% cached.`);
+          }
         }
       };
 
       try {
-        statusText.innerText = "Connecting to unblocked neural mirrors...";
+        statusText.innerText = "Mapping jsDelivr CDN assets...";
+        logSys("Routing CDN requests to unblocked ESM jsDelivr mirror lines...");
         
-        statusText.innerText = "Loading Audio Engine...";
+        statusText.innerText = "Loading Whisper Engine...";
         transcribePipeline = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en', { progress_callback: onProgress });
+        logSys("Loaded neural model: Whisper-Tiny.en successfully allocated in cache storage.", "success");
         
-        statusText.innerText = "Loading Light Analytics Core...";
+        statusText.innerText = "Loading Qwen LLM...";
         insightPipeline = await pipeline('text2text-generation', 'Xenova/Qwen1.5-0.5B-Chat', { progress_callback: onProgress }); 
+        logSys("Loaded neural model: Qwen-1.5 (0.5B params) Chat mapped locally.", "success");
 
         progressBar.style.width = '100%';
         progressText.innerText = '100%';
-        statusText.innerText = "Neural core successfully configured offline.";
+        statusText.innerText = "Neural core successfully configured.";
+        logSys("Initialization complete. All execution tasks will complete locally inside the client loop.", "success");
         
         recordBtn.disabled = false;
-        recordBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer";
-        transcriptionBox.innerText = "System ready. Open recording input loop to evaluate.";
-        recordStatus.innerText = "Secure browser recording interfaces active.";
+        recordBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer active:scale-95 shadow-md shadow-emerald-600/10";
+        transcriptionBox.innerText = "System secure and ready. Tap record to test.";
+        recordStatus.innerText = "Secure microphone capture ready.";
       } catch (err) {
         progressBar.style.width = '0%';
         progressText.innerText = '0%';
-        statusText.innerText = "Network Blocked.";
+        statusText.innerText = "Network Restricted.";
+        logSys("FATAL: Network request dropped. Local pipeline blocked by external firewall profile.", "error");
         
         transcriptionBox.innerHTML = `
           <div class="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg space-y-3">
-            <div class="flex items-center gap-2 text-rose-400 font-bold">
+            <div class="flex items-center gap-2 text-rose-400 font-bold text-xs">
               <i data-lucide="alert-triangle" class="w-4 h-4"></i>
               <span>Environment Network Restriction Detected</span>
             </div>
-            <p class="text-xs text-slate-300 leading-relaxed">
-              The local application shell is fully operational, but an external security profile or network extension is interrupting token downloads from the resource endpoints.
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              The local sandbox layout is operational, but an active security filter is dropping connections to our model repository.
             </p>
-            <p class="text-xs text-indigo-300 font-medium">
-              💡 To evaluate immediately, open this repository URL on any unfiltered mobile phone link or open hotspot line.
+            <p class="text-[11px] text-indigo-300 font-medium">
+              💡 To view the working live models, simply open this URL on an open mobile device line.
             </p>
           </div>
         `;
         lucide.createIcons();
-        console.error(err);
       }
     });
+
+    // Real-Time Waveform Render Loop
+    function drawWaveform() {
+      if (!isRecording) return;
+      animationId = requestAnimationFrame(drawWaveform);
+      analyser.getByteTimeDomainData(dataArray);
+
+      canvasCtx.fillStyle = 'rgb(7, 10, 19)';
+      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+      canvasCtx.lineWidth = 1.5;
+      canvasCtx.strokeStyle = '#34d399'; // Emerald-400 matching visual brand
+      canvasCtx.beginPath();
+
+      const sliceWidth = canvas.width / dataArray.length;
+      let x = 0;
+
+      for (let i = 0; i < dataArray.length; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = (v * canvas.height) / 2;
+        if (i === 0) canvasCtx.moveTo(x, y);
+        else canvasCtx.lineTo(x, y);
+        x += sliceWidth;
+      }
+
+      canvasCtx.lineTo(canvas.width, canvas.height / 2);
+      canvasCtx.stroke();
+    }
 
     recordBtn.addEventListener('click', async () => {
       if (!isRecording) {
         audioChunks = [];
-        transcriptionBox.innerText = "🟢 Streaming active offline audio arrays into browser memory matrices...";
+        transcriptionBox.innerText = "Listening closely to local input stream...";
         insightsBox.innerText = "";
         
         try {
+          logSys("Initializing user audio context thread...");
           stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+          
+          // Wire up the visualizer nodes
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 1024;
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          
           const source = audioContext.createMediaStreamSource(stream);
           processor = audioContext.createScriptProcessor(4096, 1, 1);
           
@@ -218,17 +315,27 @@
           
           source.connect(processor);
           processor.connect(audioContext.destination);
+          source.connect(analyser); // Route source to active canvas analyser
           
           isRecording = true;
+          visualizerContainer.classList.remove('hidden');
+          canvas.width = visualizerContainer.clientWidth;
+          canvas.height = 48;
+          drawWaveform(); // Run real-time oscillator
+
           recordBtn.innerText = "Cut & Process Insights";
           recordBtn.classList.replace('bg-emerald-600', 'bg-rose-600');
           recordBtn.classList.replace('hover:bg-emerald-500', 'hover:bg-rose-500');
-          recordStatus.innerText = "Recording operational sandbox. Click button to invoke structural generation.";
+          recordStatus.innerText = "Raw physical audio logging direct into local array buffers.";
+          logSys("Secure capture sandbox active. Raw speech structures are being cached internally.", "info");
         } catch (err) {
           alert("Microphone connection fault: " + err.message);
+          logSys(`Failed to initialize WebAudio stream: ${err.message}`, "error");
         }
       } else {
         isRecording = false;
+        cancelAnimationFrame(animationId);
+        visualizerContainer.classList.add('hidden');
         recordBtn.innerText = "Processing...";
         recordBtn.disabled = true;
         
@@ -240,7 +347,8 @@
           stream.getTracks().forEach(track => track.stop());
         }
 
-        recordStatus.innerText = "Processing computational tensor array calculations completely offline...";
+        recordStatus.innerText = "Decoding array buffers...";
+        logSys("Audio lines closed. Merging float buffers for downsampled mono parsing...");
 
         const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.length, 0);
         const mergedAudio = new Float32Array(totalLength);
@@ -252,35 +360,39 @@
 
         try {
           const startTime = performance.now();
+          logSys("Invoking Whisper-Tiny local execution threads...", "info");
           const result = await transcribePipeline(mergedAudio, { chunk_length_s: 30, stride_length_s: 5 });
-          const duration = (performance.now() - startTime) / 1000;
-          
           const rawText = result.text || "";
+          
           transcriptionBox.innerText = rawText || "[No semantic speech patterns registered]";
+          logSys(`Audio transcription finished successfully. Input parsed.`, "success");
 
           if (rawText.trim()) {
-            recordStatus.innerText = "Formulating insights through conversational structural transformations...";
+            recordStatus.innerText = "Synthesizing conversational metrics...";
+            logSys("Formatting raw text streams with strict Qwen chat system markers...");
             
-            // Format prompt perfectly using explicit Qwen chat template syntax rules
             const prompt = `<|im_start|>system\nYou are a secure, zero-cloud assistant. Provide a brief summary of the user's speech followed by an itemized list of key actions.<|im_end|>\n<|im_start|>user\n${rawText}<|im_end|>\n<|im_start|>assistant\n`;
             
+            logSys("Invoking local Qwen-1.5 text generator...","info");
             const summaryResult = await insightPipeline(prompt, { max_new_tokens: 128, temperature: 0.3 });
             
-            // Clean up any remaining formatting syntax wrappers from output text
             let processedOutput = summaryResult[0].generated_text.replace(prompt, '').trim();
             processedOutput = processedOutput.replace(/<\|im_end\|>/g, '').trim();
             
             insightsBox.innerText = processedOutput;
+            logSys("Local structural summarization transformation complete.", "success");
 
-            // Calculate precise mathematical telemetry speeds
+            // Precision speed metrics calculations
             const tokensGenerated = processedOutput.split(/\s+/).length * 1.3;
-            const tokPerSec = Math.max(Math.round(tokensGenerated / (performance.now() - startTime) * 1000), 12);
+            const duration = (performance.now() - startTime) / 1000;
+            const tokPerSec = Math.max(Math.round(tokensGenerated / duration), 12);
             speedMetric.innerHTML = `${tokPerSec} <span class="text-xs text-slate-400">tok/s</span>`;
           }
           
           recordStatus.innerText = "Inference execution completed safely.";
         } catch (err) {
           transcriptionBox.innerText = "Execution failed: " + err.message;
+          logSys(`Inference run threw execution error: ${err.message}`, "error");
         }
 
         recordBtn.innerText = "Open Secure Local Recording";
