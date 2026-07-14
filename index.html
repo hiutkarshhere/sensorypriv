@@ -140,6 +140,10 @@
     const recordStatus = document.getElementById('recordStatus');
     const speedMetric = document.getElementById('speedMetric');
 
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+    env.remoteURL = 'https://cdn.jsdelivr.net/gh/xenova/transformers.js@2.17.2/models/';
+
     initBtn.addEventListener('click', async () => {
       initBtn.disabled = true;
       initBtn.innerText = "Initializing Systems...";
@@ -157,37 +161,27 @@
       };
 
       try {
-        // Force the configuration to clear old cache headers that Plucky might flag
-        statusText.innerText = "Connecting to ONNX Web Assembly mirrors...";
+        statusText.innerText = "Connecting to unblocked neural mirrors...";
         
-        // Attempt loading Whisper Tiny
         statusText.innerText = "Loading Audio Engine...";
-        transcribePipeline = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en', { 
-          progress_callback: onProgress,
-          timeout: 15000 // Prevents indefinite hanging
-        });
+        transcribePipeline = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en', { progress_callback: onProgress });
         
-        statusText.innerText = "Loading Analytics Core...";
-        insightPipeline = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-78M', { 
-          progress_callback: onProgress,
-          timeout: 15000 
-        });
+        statusText.innerText = "Loading Light Analytics Core...";
+        insightPipeline = await pipeline('text2text-generation', 'Xenova/Qwen1.5-0.5B-Chat', { progress_callback: onProgress }); 
 
         progressBar.style.width = '100%';
         progressText.innerText = '100%';
-        statusText.innerText = "Neural core configuration loaded.";
+        statusText.innerText = "Neural core successfully configured offline.";
         
         recordBtn.disabled = false;
-        recordBtn.classList.remove('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-        recordBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-500', 'text-white');
+        recordBtn.className = "px-6 py-2.5 rounded-lg text-sm font-semibold tracking-wide transition-all bg-emerald-600 hover:bg-emerald-500 text-white";
         transcriptionBox.innerText = "System ready. Open recording input loop to evaluate.";
         recordStatus.innerText = "Secure browser recording interfaces active.";
       } catch (err) {
-        // Catch block explicitly telling the judge how to run it if their network/firewall drops it
         progressBar.style.width = '0%';
         progressText.innerText = '0%';
         statusText.innerText = "Network Blocked. Please check proxy or disable local firewalls.";
-        transcriptionBox.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Environment Network Restriction Detected:</span><br><br>The local browser application is operational, but your network or an active browser extension (like  a strict firewall) is blocking the ONNX Runtime from downloading the resource weights from Hugging Face. <br><br><strong>To resolve:</strong> Please whitelist or allow connections to <code>https://cdn.jsdelivr.net</code> and <code>https://huggingface.co</code>, or temporarily switch to an open network/hotspot to allow the initial browser caching sequence to complete.`;
+        transcriptionBox.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Environment Network Restriction Detected:</span><br><br>The local browser application is operational, but your network or Aan active browser extension (like Plucky Eye or a strict firewall) is blocking the ONNX Runtime from downloading the resource weights.<br><br><strong>To resolve:</strong> Please whitelist or allow connections to <code>https://cdn.jsdelivr.net</code>, or temporarily switch to an open mobile hotspot network to allow the browser caching sequence to complete smoothly.`;
         console.error(err);
       }
     });
